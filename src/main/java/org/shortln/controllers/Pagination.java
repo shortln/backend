@@ -2,6 +2,7 @@ package org.shortln.controllers;
 
 import lombok.Data;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +19,8 @@ public class Pagination<T> {
     private List<T> items;
 
     @Data
-    public class Query {
+    @NoArgsConstructor
+    public static class Query<T> {
         private String str;
         private Integer page = 0;
         private Integer size = 10;

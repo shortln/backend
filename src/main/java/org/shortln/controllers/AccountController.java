@@ -53,7 +53,9 @@ public class AccountController {
 
     @NeedLogin
     @GetMapping("")
-    public Pagination<Account> getAccounts(Pagination<Account>.Query query) {
+    public Pagination<Account> getAccounts(
+            @RequestBody Pagination.Query<Account> query
+    ) {
         var newAc = Account.builder()
                 .username(query.getStr())
                 .nickname(query.getStr())
