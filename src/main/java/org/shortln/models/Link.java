@@ -2,9 +2,11 @@ package org.shortln.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,7 +18,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TypeDef(name = "json", typeClass = JsonStringType.class)
+@TypeDefs({
+        @TypeDef(name = "json", typeClass = JsonStringType.class),
+        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+})
 public class Link {
     @Data
     @NoArgsConstructor
@@ -50,7 +55,7 @@ public class Link {
     private Long id;
     private String title;
     private Timestamp ctime;
-    @org.hibernate.annotations.Type(type = "json")
+    @org.hibernate.annotations.Type(type = "jsonb")
     @Column(columnDefinition = "json")
     private Expire expire;
     @Enumerated(EnumType.ORDINAL)
