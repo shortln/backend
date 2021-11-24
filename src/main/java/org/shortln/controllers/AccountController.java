@@ -62,10 +62,7 @@ public class AccountController {
                 .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.contains())
                 .withMatcher("nickname", ExampleMatcher.GenericPropertyMatchers.contains())
                 .withIgnorePaths("password");
-        return query.getPagination(ar, Example.of(newAc, matcher), page -> {
-            page.forEach(item -> item.setPasswordHash(null));
-            return page;
-        });
+        return query.getPagination(ar, Example.of(newAc, matcher));
     }
 
     @PostMapping("/{username}/login")
