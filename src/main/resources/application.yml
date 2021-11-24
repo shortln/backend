@@ -1,10 +1,20 @@
 spring:
-  datasource:
-    username: shortln
-    password: 8KdXycJ4T2rf
-    url: jdbc:postgresql://localhost:35432/shortln
+  profiles.active: dev
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 41800
+
+# dev-config
+---
+spring:
+  config.activate.on-profile: dev
+  datasource:
+    username: shortln
+    password: 8KdXycJ4T2rf
+    url: jdbc:postgresql://localhost:35432/shortln
+---
