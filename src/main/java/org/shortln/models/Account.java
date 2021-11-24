@@ -24,6 +24,7 @@ public class Account {
     @JsonIgnore
     private String passwordHash;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "id", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<LinksGroup> linksGroups;
 }
