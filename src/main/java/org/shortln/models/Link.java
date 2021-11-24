@@ -1,5 +1,6 @@
 package org.shortln.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.*;
@@ -55,10 +56,12 @@ public class Link {
     @Enumerated(EnumType.ORDINAL)
     private Status status;
 
+    @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE, CascadeType.REFRESH}, optional=false)
     @JoinColumn(name="gid")
     private LinksGroup group;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "id", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<LinkLog> linkLogs;
 }
