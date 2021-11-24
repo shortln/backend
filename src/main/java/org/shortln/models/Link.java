@@ -11,6 +11,7 @@ import org.hibernate.annotations.TypeDefs;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -54,6 +55,7 @@ public class Link {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private String jumpUrl;
     private Timestamp ctime;
     @org.hibernate.annotations.Type(type = "jsonb")
     @Column(columnDefinition = "json")
@@ -69,4 +71,10 @@ public class Link {
     @JsonIgnore
     @OneToMany(mappedBy = "id", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<LinkLog> linkLogs;
+
+    @PrePersist
+    void preInsert() {
+        if (ctime == null)
+            ctime = new Timestamp(new Date().getTime());
+    }
 }
