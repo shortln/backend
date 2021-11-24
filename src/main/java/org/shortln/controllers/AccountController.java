@@ -1,9 +1,11 @@
 package org.shortln.controllers;
 
 import lombok.Data;
+import org.shortln.annotations.NeedLogin;
 import org.shortln.exceptions.BusinessException;
 import org.shortln.models.Account;
 import org.shortln.repositories.AccountRepository;
+import org.shortln.tools.SessionTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
@@ -11,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 
 @Data
@@ -34,12 +39,11 @@ public class AccountController {
     public Account createAccount(
             @RequestBody AccountIn accountIn
     ) {
-        var a = new Account();
-        a.setUsername(accountIn.getUsername());
-        a.setNickname(accountIn.getNickname());
-        a.setPasswordHash(
-                encryptPWD(accountIn.getPassword())
-        );
+        var a = Account.builder()
+                .username(accountIn.getUsername())
+                .nickname(accountIn.getNickname())
+                .passwordHash(encryptPWD(accountIn.getPassword()))
+                .build();
         try {
             return ar.save(a);
         } catch (DataIntegrityViolationException e) {
@@ -47,6 +51,7 @@ public class AccountController {
         }
     }
 
+    @NeedLogin
     @GetMapping("")
     public Pagination<Account> getAccounts(Pagination<Account>.Query query) {
         var newAc = Account.builder()
@@ -75,6 +80,7 @@ public class AccountController {
         if (!Objects.equals(ac.getPasswordHash(), encryptPWD(accountIn.getPassword()))) {
             throw new BusinessException(HttpStatus.UNPROCESSABLE_ENTITY, "密码错误。");
         }
+        SessionTool.setSession(ac.getId(), ac.getUsername());
         return ac;
     }
 }
