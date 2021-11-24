@@ -69,7 +69,7 @@ public class Link {
     private LinksGroup group;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "id", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "link", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<LinkLog> linkLogs;
 
     @PrePersist

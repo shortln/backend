@@ -20,7 +20,7 @@ public class LinksGroup {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "id", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "group", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<Link> links;
 
     @JsonIgnore
