@@ -1,5 +1,6 @@
 package org.shortln.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class LinksGroup {
     @OneToMany(mappedBy = "id", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<Link> links;
 
+    @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE, CascadeType.REFRESH}, optional=false)
     @JoinColumn(name="author_id")
     private Account author;
