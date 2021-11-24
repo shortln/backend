@@ -1,6 +1,5 @@
 package org.shortln.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,16 +13,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account {
+public class LinksGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
-    private String username;
-    private String nickname;
-    @JsonIgnore
-    private String passwordHash;
+    private String name;
 
     @OneToMany(mappedBy = "id", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-    private List<LinksGroup> linksGroups;
+    private List<Link> links;
+
+    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.REFRESH}, optional=false)
+    @JoinColumn(name="author_id")
+    private Account author;
 }
