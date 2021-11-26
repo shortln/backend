@@ -10,10 +10,13 @@ import org.shortln.repositories.LinkRepository;
 import org.shortln.repositories.LinksGroupRepository;
 import org.shortln.tools.SessionTool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @Data
 class LinkIn {
@@ -63,7 +66,11 @@ public class LinkController {
     public void deleteLinksGroup(
             @PathVariable Long id
     ) {
-        linksGroupRepo.deleteById(id);
+        try {
+            linksGroupRepo.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new BusinessException(HttpStatus.NOT_FOUND, "链接分组不存在。");
+        }
     }
 
     @PatchMapping("groups/{id}")
@@ -71,13 +78,13 @@ public class LinkController {
             @PathVariable Long id,
             @RequestBody LinksGroupIn linksGroupIn
     ) {
-        var olg = linksGroupRepo.findById(id);
-        if (olg.isEmpty()) {
+        try {
+            var lg = linksGroupRepo.getById(id);
+            lg.setName(linksGroupIn.getName());
+            linksGroupRepo.save(lg);
+        } catch (EntityNotFoundException e) {
             throw new BusinessException(HttpStatus.NOT_FOUND, "链接分组不存在。");
         }
-        var lg = olg.get();
-        lg.setName(linksGroupIn.getName());
-        linksGroupRepo.save(lg);
     }
 
     @GetMapping("groups")
