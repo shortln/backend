@@ -82,4 +82,15 @@ public class AccountController {
         SessionTool.setSession(ac.getId(), ac.getUsername());
         return ac;
     }
+
+    @NeedLogin
+    @GetMapping("/{username}/logout")
+    public void logoutByUsername(
+            @PathVariable String username
+    ) {
+        SessionTool.setSession();
+        if (Objects.equals(SessionTool.curAccount().getUsername(), username)) {
+            throw new BusinessException(HttpStatus.UNPROCESSABLE_ENTITY, "数据异常。");
+        }
+    }
 }
