@@ -51,6 +51,16 @@ public class LinkController {
         return linkRepository.save(ln);
     }
 
+    @GetMapping("{id}")
+    public Link getLink(
+            @PathVariable Long id
+    ) {
+        var oln = linkRepository.findById(id);
+        if (oln.isEmpty())
+            throw new BusinessException(HttpStatus.NOT_FOUND, "链接不存在。");
+        return oln.get();
+    }
+
     @PostMapping("groups")
     public LinksGroup createLinksGroup(@RequestBody LinksGroupIn linksGroupIn) {
         var lg = LinksGroup.builder()
