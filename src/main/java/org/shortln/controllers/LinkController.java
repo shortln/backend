@@ -59,7 +59,7 @@ public class LinkController {
 
     @GetMapping("groups")
     public Pagination<LinksGroup> getLinksGroup(
-            @RequestBody Pagination.Query<LinksGroup> query
+            Pagination.Query<LinksGroup> query
     ) {
         var newLG = LinksGroup.builder()
                 .name(query.getStr())
