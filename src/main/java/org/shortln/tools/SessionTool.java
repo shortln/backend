@@ -27,16 +27,23 @@ public class SessionTool {
         }});
     }
 
+    public static void setSession() {
+        session.removeAttribute("user");
+    }
+
     public static CurAccount curAccount() {
-        var u = (HashMap<String, Object>) session.getAttribute("user");
-        if (u == null)
+        var o = session.getAttribute("user");
+        if (o == null)
             throw new BusinessException(HttpStatus.UNAUTHORIZED, "请登陆。");
         try {
+            if (!(o instanceof HashMap))
+                throw new ClassCastException();
+            var u = (HashMap<?, ?>) o;
             return CurAccount.builder()
                     .id((Long) u.get("id"))
                     .username((String) u.get("username"))
                     .build();
-        } catch (Exception e) {
+        } catch (ClassCastException e) {
             throw new BusinessException(HttpStatus.UNAUTHORIZED, "服务器数据有误，请重新登陆。");
         }
     }
