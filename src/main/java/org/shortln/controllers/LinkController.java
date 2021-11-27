@@ -1,6 +1,7 @@
 package org.shortln.controllers;
 
 import lombok.Data;
+import org.shortln.annotations.NeedLogin;
 import org.shortln.exceptions.BusinessException;
 import org.shortln.models.Account;
 import org.shortln.models.Link;
@@ -40,6 +41,7 @@ public class LinkController {
     @Autowired
     private LinkLogRepository linkLogRepo;
 
+    @NeedLogin
     @PostMapping("")
     public Link createLink(@RequestBody LinkIn linkIn) {
         var ln = Link.builder()
@@ -61,6 +63,7 @@ public class LinkController {
         return oln.get();
     }
 
+    @NeedLogin
     @PostMapping("groups")
     public LinksGroup createLinksGroup(@RequestBody LinksGroupIn linksGroupIn) {
         var lg = LinksGroup.builder()
@@ -72,6 +75,7 @@ public class LinkController {
         return linksGroupRepo.save(lg);
     }
 
+    @NeedLogin
     @DeleteMapping("groups/{id}")
     public void deleteLinksGroup(
             @PathVariable Long id
@@ -83,6 +87,7 @@ public class LinkController {
         }
     }
 
+    @NeedLogin
     @PatchMapping("groups/{id}")
     public void patchLinksGroup(
             @PathVariable Long id,
@@ -97,12 +102,14 @@ public class LinkController {
         }
     }
 
+    @NeedLogin
     @GetMapping("groups")
     public Pagination<LinksGroup> getLinksGroup(
             Pagination.Query<LinksGroup> query
     ) {
         var newLG = LinksGroup.builder()
                 .name(query.getStr())
+                .author(Account.builder().id(SessionTool.curAccount().getId()).build())
                 .build();
         var matcher = ExampleMatcher.matching()
                 .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains());
