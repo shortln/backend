@@ -2,15 +2,12 @@ package org.shortln.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.shortln.annotations.NeedLogin;
-import org.shortln.exceptions.BusinessException;
 import org.shortln.tools.SessionTool;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
